@@ -56,10 +56,10 @@ function feedTable(currentIndex, numOfRows){
     for(let i = currentIndex; i < currentIndex + numOfRows; i++){
         let item = generalData.results[i];
         let itemName = item.name.replace(/\s/g, '_');
-        temp += "<tr>" ;
-        temp += "<td id='" + item.name + "'" + "onclick=onRowClick(" + "'" + itemName + "'" + ")>" + item.name + "</td>";
-        temp += "<td id='" + item.name + "'" + "onclick=onRowClick(" + "'" + itemName + "'" + ")>" + item.gender + "</td>";
-        temp += "<td class='worldTd' onclick=onWorldColumnClick(" + "'" + itemName + "'" + ")>" + worldDict[item.name] + "</td></tr>";
+        temp += "<tr" + " onclick=onRowClick(" + "'" + itemName + "'" + ")>" ;
+        temp += "<td>" + item.name + "</td>";
+        temp += "<td>" + item.gender + "</td>";
+        temp += "<td>" + worldDict[item.name] + "</td></tr>";
     }
     document.getElementById('data').innerHTML = temp;
     document.getElementById('dataTable').style.visibility = "visible";
@@ -85,8 +85,8 @@ function onRowClick(rowId){
     document.getElementById('CharacterModal').style.display = "block";
 }
 
-function onWorldColumnClick(id){
-    const characterName = removeUnderscore(id);
+function onWorldColumnClick(){
+    window.location.replace("HomeWorlds.html")
 }
 
 function removeUnderscore(string){
