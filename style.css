@@ -38,12 +38,25 @@ body{
 
 button{
     float:right;
-    width: 5%;
+    width: 8%;
+    border: #ccbc07 solid 1px;
+    border-radius: 2px;
+    background-color: transparent;
+    color: white;
+    font-size: 18px;
+}
+
+button:hover{
+    background-color: darkgoldenrod;
+}
+
+button:disabled{
+    opacity: 0.5;
 }
 
 #previousNextBtns{
     position: relative;
-    height: 60px;
+    height: 70px;
 }
 
 #nextBtn{
@@ -105,22 +118,31 @@ button{
   /* Modal Content/Box */
   .modal-content {
     position: relative;
-    background-color: #fefefe;
+    background-color: #325292;
     margin: auto;
     padding: 0;
     border: 1px solid #888;
+    border-radius: 4px;
     width: 80%;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     animation-name: animatetop;
     animation-duration: 0.4s
   }
   
+  .modal-content h1, p{
+      color: white;
+      margin: 5px;
+      margin-left: 10px;
+  }
   /* Add Animation */
   @keyframes animatetop {
     from {top: -50%; opacity: 0}
     to {top: 0px; opacity: 1}
   }
   
+  .characterData{
+      padding-bottom: 10px;
+  }
   /* The Close Button */
   .close {
     color: #aaa;

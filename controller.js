@@ -65,13 +65,24 @@ function feedTable(currentIndex, numOfRows){
     document.getElementById('dataTable').style.visibility = "visible";
     document.getElementById('previousNextBtns').style.visibility = "visible";
     document.getElementById('spaceship').style.visibility = 'hidden';
-    registerTableRowClick();
 }
 
 function onRowClick(rowId)
 {
-    let characterName = rowId.replace(/_+/g, ' ');
+    const characterName = rowId.replace(/_+/g, ' ');
+    let character = {};
+    generalData.results.forEach(item => {
+        if(item.name === characterName) character = item;
+    })
+
     document.getElementById('modalText').innerHTML = characterName;
+    document.getElementById('characterHeight').innerHTML += character.height;
+    document.getElementById('characterMass').innerHTML += character.mass;
+    document.getElementById('characterHairColor').innerHTML += character.hair_color;
+    document.getElementById('characterSkinColor').innerHTML += character.skin_color;
+    document.getElementById('characterEyeColor').innerHTML += character.eye_color;
+    document.getElementById('characterBirthYear').innerHTML += character.birth_year;
+    document.getElementById('characterGender').innerHTML += character.gender;
     document.getElementById('CharacterModal').style.display = "block";
 }
 
