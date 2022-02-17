@@ -4,9 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home Worlds</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <img src="./resources/logo.png" height="200px" class="logo">
+    <img src="./resources/spaceship.png" id="spaceship" height="50px" width="50px">
+    <table id="dataTable" class="mainTable">
+        <thead>
+            <tr>
+                <th>World Name</th>
+                <th>Terrain</th>
+            </tr>
+        </thead>
+        <tbody id="data"></tbody>
+    </table>
+    <div id="previousNextBtns">
+        <button id="nextBtn" onclick="onNextButtonClick()">Next &#xbb</button>
+        <button id="previousBtn" onclick="onPreviousButtonClick()">&#xab Previous</button>
+    </div>
+    <script type="text/javascript" src="homeWorldscontroller.js"></script>
+    <script type="text/javascript" src="common.js"></script>
 </body>
 </html>
