@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <img src="./resouces/logo.png" height="200px" class="logo">
+    <img src="./resources/logo.png" height="200px" class="logo">
+    <img src="./resources/spaceship.png" id="spaceship" height="50px" width="50px">
     <table id="dataTable" class="mainTable">
         <thead>
             <tr>
@@ -19,86 +20,16 @@
         </thead>
         <tbody id="data"></tbody>
     </table>
-    <button id="nextBtn" onclick="onNextButtonClick()">Next</button>
+    <div id="previousNextBtns">
+        <button id="nextBtn" onclick="onNextButtonClick()">Next</button>
+        <button id="previousBtn" onclick="onPreviousButtonClick()">Previous</button>
+    </div>
+    <div id="CharacterModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1 id="modalText">Some text in the Modal..</p>
+          </div>
+    </div>
+    <script type="text/javascript" src="controller.js"></script>
 </body>
-<script>
-    let generalData = {};
-    let worldDict = {};
-    let currentHighestIndex = 0;
-    let numOfRowsToDisplay = 0;
-
-    window.onload = onWindowLoad()
-    window.addEventListener('resize', handleResize)
-
-    function onWindowLoad()
-    {
-       document.getElementById('dataTable').style.visibility = "hidden";
-       document.getElementById('nextBtn').disabled = true;
-       document.getElementById('nextBtn').style.visibility = "hidden";
-       fetchGeneralData()
-    }
-
-    function fetchGeneralData()
-    {
-        fetch("https://swapi.dev/api/people").then(res =>
-            res.json().then(data => {generalData = data}).then(fetchWorldData)
-        )
-    }
-
-    async function fetchWorldData()
-    {
-        await Promise.all(
-            generalData.results.map(async item => {
-                const res = await fetch(item.homeworld);
-                const resJson = await res.json();
-                await setDict(item.name, resJson.name);
-            })
-        )
-        handleResize()
-    }
-
-    async function setDict(itemName, worldName){
-        worldDict[itemName] = worldName
-    }
-
-    function handleResize(){
-        let winHeight = window.innerHeight;
-        let leftHeightSpace = winHeight - 210
-        numOfRowsToDisplay = Math.round (leftHeightSpace / 200);
-        if(numOfRowsToDisplay < generalData.results.length)
-        {
-            document.getElementById('nextBtn').disabled = false;
-        }
-        feedTable(currentHighestIndex, numOfRowsToDisplay);
-    }
-
-    function feedTable(currentIndex, numOfRows){
-        let temp = "";
-        document.getElementById('data').innerHTML = temp;
-        for(let i = currentIndex; i < currentIndex + numOfRows; i++){
-            let item = generalData.results[i];
-            temp += "<tr>";
-            temp += "<td>" + item.name + "</td>";
-            temp += "<td>" + item.gender + "</td>";
-            temp += "<td>" + worldDict[item.name] + "</td></tr>";
-        }
-        document.getElementById('data').innerHTML = temp;
-        document.getElementById('dataTable').style.visibility = "visible";
-        document.getElementById('nextBtn').style.visibility = "visible";
-    }
-
-    function onNextButtonClick(){
-        currentHighestIndex += numOfRowsToDisplay - 1;
-        if(currentHighestIndex + numOfRowsToDisplay >= generalData.results.length)
-        {
-            currentHighestIndex = generalData.results.length - 1;
-            document.getElementById('nextBtn').disabled = true;
-        }
-        else{
-            feedTable(currentHighestIndex, numOfRowsToDisplay);
-        }
-       
-    }
-
-</script>
 </html>
