@@ -31,6 +31,10 @@
     background-color: #ccbc07;
 }
 
+.mainTable .worldTd:hover{
+    background-color: orange;
+}
+
 body{
     position: relative;
     background-image: url('./resources/background.png');

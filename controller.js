@@ -56,10 +56,10 @@ function feedTable(currentIndex, numOfRows){
     for(let i = currentIndex; i < currentIndex + numOfRows; i++){
         let item = generalData.results[i];
         let itemName = item.name.replace(/\s/g, '_');
-        temp += "<tr id='" + item.name + "'" + "onclick=onRowClick(" + "'" + itemName + "'" + ")>" ;
-        temp += "<td>" + item.name + "</td>";
-        temp += "<td>" + item.gender + "</td>";
-        temp += "<td>" + worldDict[item.name] + "</td></tr>";
+        temp += "<tr>" ;
+        temp += "<td id='" + item.name + "'" + "onclick=onRowClick(" + "'" + itemName + "'" + ")>" + item.name + "</td>";
+        temp += "<td id='" + item.name + "'" + "onclick=onRowClick(" + "'" + itemName + "'" + ")>" + item.gender + "</td>";
+        temp += "<td class='worldTd' onclick=onWorldColumnClick(" + "'" + itemName + "'" + ")>" + worldDict[item.name] + "</td></tr>";
     }
     document.getElementById('data').innerHTML = temp;
     document.getElementById('dataTable').style.visibility = "visible";
@@ -67,9 +67,8 @@ function feedTable(currentIndex, numOfRows){
     document.getElementById('spaceship').style.visibility = 'hidden';
 }
 
-function onRowClick(rowId)
-{
-    const characterName = rowId.replace(/_+/g, ' ');
+function onRowClick(rowId){
+    const characterName = removeUnderscore(rowId);
     let character = {};
     generalData.results.forEach(item => {
         if(item.name === characterName) character = item;
@@ -84,6 +83,14 @@ function onRowClick(rowId)
     document.getElementById('characterBirthYear').innerHTML += character.birth_year;
     document.getElementById('characterGender').innerHTML += character.gender;
     document.getElementById('CharacterModal').style.display = "block";
+}
+
+function onWorldColumnClick(id){
+    const characterName = removeUnderscore(id);
+}
+
+function removeUnderscore(string){
+    return string.replace(/_+/g, ' ');
 }
 
 document.getElementsByClassName("close")[0].onclick = function(){
