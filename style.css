@@ -58,6 +58,10 @@ button:disabled{
     opacity: 0.5;
 }
 
+button:disabled:hover{
+    background-color: transparent;
+}
+
 #previousNextBtns{
     position: relative;
     height: 70px;

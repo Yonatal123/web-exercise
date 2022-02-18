@@ -1,9 +1,8 @@
 window.onload = onWindowLoad()
 window.addEventListener('resize', handleResize)
 
-let generalData = {};
-let results = [];
-let planets = [];
+let tableItems = [];
+let generalDataCount = 0;
 let currneLowestIndex = 0;
 let numOfRowsToDisplay = 0;
 
@@ -14,14 +13,21 @@ function onWindowLoad()
    document.getElementById('previousBtn').disabled = true;
    document.getElementById('previousNextBtns').style.visibility = "hidden";
    fetchGeneralData()
-//    fetchGeneralWorldData();
+}
+
+async function feedInitialResults(){
+    const count = generalDataCount > 10 ? 10 : generalDataCount;
+    await feedResults(1, count);
+    handleResize();
+    if(generalDataCount > 10)
+        feedResults(11, generalDataCount);
 }
 
 function handleResize(){
     let winHeight = window.innerHeight;
     let leftHeightSpace = winHeight - 210
     numOfRowsToDisplay = Math.round (leftHeightSpace / 200);
-    if(numOfRowsToDisplay < results.length)
+    if(numOfRowsToDisplay < generalDataCount)
     {
         document.getElementById('nextBtn').disabled = false;
     }
@@ -37,9 +43,9 @@ function onNextButtonClick(){
         document.getElementById('previousBtn').disabled = false;
     }
 
-    if(currneLowestIndex + numOfRowsToDisplay >= results.length)
+    if(currneLowestIndex + numOfRowsToDisplay >= generalDataCount)
     {
-        feedTable(currneLowestIndex, results.length - currneLowestIndex);
+        feedTable(currneLowestIndex, generalDataCount - currneLowestIndex);
         document.getElementById('nextBtn').disabled = true;
     }
     else{
@@ -50,7 +56,7 @@ function onNextButtonClick(){
 function onPreviousButtonClick(){
     currneLowestIndex -= numOfRowsToDisplay;
     
-    if(currneLowestIndex + numOfRowsToDisplay <= results.length)
+    if(currneLowestIndex + numOfRowsToDisplay <= generalDataCount)
     {
         document.getElementById('nextBtn').disabled = false;
     }
