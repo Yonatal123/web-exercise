@@ -48,6 +48,7 @@ button{
     background-color: transparent;
     color: white;
     font-size: 18px;
+    padding: 5px;
 }
 
 button:hover{
@@ -64,7 +65,7 @@ button:disabled:hover{
 
 #previousNextBtns{
     position: relative;
-    height: 70px;
+    height: 80px;
 }
 
 #nextBtn{
@@ -108,6 +109,47 @@ button:disabled:hover{
                   translate(-165px)
                   rotate(-360deg);
       }
+  }
+
+  #horizontalSpaceship{
+    position:absolute;
+    top:150px;
+    left:auto;
+    animation-name: loadingAnimation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes loadingAnimation {
+    0%{
+        left:20%;
+      
+      }
+      100%{
+        left:80%;
+      }
+  }
+
+  .loadingAdditionalIndication{
+    position:absolute;
+    top:150px;
+    font-size: 24px;
+    left:10%;
+  }
+  #loadingAdditionalText{
+      float: left;
+      color: #ccbc07;
+  }
+  #loadingAdditionalPercentage{
+      float: right;
+      color: #ccbc07;
+  }
+
+  #backHomeBtn{
+    position: absolute;
+    float: left;
+    left:10%;
+    margin-top: 10px;    
   }
 
 .modal {

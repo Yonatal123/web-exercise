@@ -1,4 +1,3 @@
-
 function fetchGeneralData(){
     fetch("https://swapi.dev/api/people/").then(res =>
         res.json().then(data => {generalDataCount = data.count}).then(feedInitialResults)
@@ -17,7 +16,17 @@ async function feedResults(firstIndex, lastIndex){
            console.log("Failed to fetch " + i);
            generalDataCount -= 1;
        }
+
+       const percentege = (i/lastIndex) * 100;
+       if (!isLoadingAdditionalData){
+        }
+        else{
+            document.getElementById("loadingAdditionalPercentage").innerHTML = Math.round(percentege) + "%";
+        }
    }
+   if(tableItems.length == generalDataCount)
+         document.getElementById('horizontalSpaceship').style.visibility = "hidden";
+         document.getElementById('loadingAdditionalIndication').style.visibility = "hidden";
 }
 
 async function setTableItem(name, gender, worldPath){
@@ -58,8 +67,8 @@ function feedTable(currentIndex, numOfRows){
 function onRowClick(rowId){
     const characterName = removeUnderscore(rowId);
     let character = {};
-    results.forEach(item => {
-        if(item.name === characterName) character = item;
+    tableItems.forEach(item => {
+        if(item[0] === characterName) character = item;
     })
 
     document.getElementById('modalText').innerHTML = characterName;

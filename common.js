@@ -6,12 +6,16 @@ let generalDataCount = 0;
 let currneLowestIndex = 0;
 let numOfRowsToDisplay = 0;
 
+let isLoadingAdditionalData = false;
+
 function onWindowLoad()
 {
    document.getElementById('dataTable').style.visibility = "hidden";
    document.getElementById('nextBtn').disabled = true;
    document.getElementById('previousBtn').disabled = true;
    document.getElementById('previousNextBtns').style.visibility = "hidden";
+   document.getElementById('horizontalSpaceship').style.visibility = "hidden";
+   document.getElementById('loadingAdditionalIndication').style.visibility = "hidden";
    fetchGeneralData()
 }
 
@@ -19,8 +23,12 @@ async function feedInitialResults(){
     const count = generalDataCount > 10 ? 10 : generalDataCount;
     await feedResults(1, count);
     handleResize();
-    if(generalDataCount > 10)
+    document.getElementById('horizontalSpaceship').style.visibility = "visible";
+    document.getElementById('loadingAdditionalIndication').style.visibility = "visible";
+    if(generalDataCount > 10){
+        isLoadingAdditionalData = true;
         feedResults(11, generalDataCount);
+    }   
 }
 
 function handleResize(){
