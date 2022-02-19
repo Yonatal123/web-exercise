@@ -51,9 +51,9 @@ function onNextButtonClick(){
         document.getElementById('previousBtn').disabled = false;
     }
 
-    if(currneLowestIndex + numOfRowsToDisplay >= generalDataCount)
+    if(currneLowestIndex + numOfRowsToDisplay >= tableItems.length)
     {
-        feedTable(currneLowestIndex, generalDataCount - currneLowestIndex);
+        feedTable(currneLowestIndex, tableItems.length - currneLowestIndex);
         document.getElementById('nextBtn').disabled = true;
     }
     else{

@@ -22,14 +22,15 @@ async function feedResults(firstIndex, lastIndex){
         }
         const percentege = (i/lastIndex) * 100;
         if (!isLoadingAdditionalData){
+            document.getElementById("loadingInitialText").innerHTML = Math.round(percentege) + "%";
          }
          else{
              document.getElementById("loadingAdditionalPercentage").innerHTML = Math.round(percentege) + "%";
          }
     }
-    if(tableItems.length == generalDataCount)
-         document.getElementById('horizontalSpaceship').style.visibility = "hidden";
-         document.getElementById('loadingAdditionalIndication').style.visibility = "hidden";
+     document.getElementById('horizontalSpaceship').style.visibility = "hidden";
+     document.getElementById('loadingAdditionalIndication').style.visibility = "hidden";
+     document.getElementById('nextBtn').disabled = false;
  }
 
  async function setTableItem(name, terrain){
@@ -47,7 +48,8 @@ function feedTable(currentIndex, numOfRows){
     document.getElementById('data').innerHTML = temp;
     document.getElementById('dataTable').style.visibility = "visible";
     document.getElementById('previousNextBtns').style.visibility = "visible";
-    document.getElementById('spaceship').style.visibility = 'hidden';
+    document.getElementById('spaceship').remove();
+    document.getElementById('loadingInitialText').remove();
 }
 
 function onBackHomeClick(){

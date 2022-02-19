@@ -31,6 +31,12 @@
     background-color: #ccbc07;
 }
 
+.worldTh{
+    background-image: url(./resources/planet.png);
+    background-size: 18% 50%;
+    background-repeat: no-repeat;
+    background-position: 90% 15%;
+}
 .worldTh:hover{
     opacity: 0.5;
 }
@@ -91,7 +97,7 @@ button:disabled:hover{
 #spaceship{
     position:absolute;
     top:150%;
-    left:auto;
+    left:45%;
     animation-name: animateSpaceship;
     animation-duration: 2s;
     animation-iteration-count: infinite;
@@ -100,13 +106,13 @@ button:disabled:hover{
 @keyframes animateSpaceship {
     0%{
         transform:rotate(0deg)
-                  translate(-165px)
+                  translate(-220px)
                   rotate(0deg);
       
       }
       100%{
         transform:rotate(360deg)
-                  translate(-165px)
+                  translate(-220px)
                   rotate(-360deg);
       }
   }
@@ -128,6 +134,14 @@ button:disabled:hover{
       100%{
         left:80%;
       }
+  }
+
+  .loadingIndication{
+    position: absolute;
+    top:120%;
+    left:45%;
+    font-size: 80px;
+    color: #ccbc07;
   }
 
   .loadingAdditionalIndication{
