@@ -1,6 +1,11 @@
+let generalData = {};
+
 function fetchGeneralData(){
     fetch("https://swapi.dev/api/people/").then(res =>
-        res.json().then(data => {generalDataCount = data.count}).then(feedInitialResults)
+        res.json().then(data => {
+            generalData = data;
+            generalDataCount = data.count;
+        }).then(feedInitialResults)
     )
 }
 
@@ -69,8 +74,9 @@ function feedTable(currentIndex, numOfRows){
 function onRowClick(rowId){
     const characterName = removeUnderscore(rowId);
     let character = {};
-    tableItems.forEach(item => {
-        if(item[0] === characterName) character = item;
+    generalData.results.forEach(item => {
+        if(item.name === characterName)
+                 character = item;
     })
 
     document.getElementById('modalText').innerHTML = characterName;
