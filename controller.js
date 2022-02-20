@@ -1,10 +1,10 @@
 let generalData = {};
 
 function fetchGeneralData(){
-    fetch("https://swapi.dev/api/people/").then(res =>
+    fetch("https://www.swapi.tech/api/people/").then(res =>
         res.json().then(data => {
             generalData = data;
-            generalDataCount = data.count;
+            generalDataCount = data.total_records;
         }).then(feedInitialResults)
     )
 }
@@ -12,10 +12,10 @@ function fetchGeneralData(){
 async function feedResults(firstIndex, lastIndex){
    for(let i = firstIndex; i <= lastIndex; i++){
        try{
-        const res = await fetch("https://swapi.dev/api/people/" + i);
+        const res = await fetch("https://www.swapi.tech/api/people/" + i);
         console.log('fetched' + i);
         const resJson = await res.json();
-        await setTableItem(resJson.name, resJson.gender, resJson.homeworld);
+        await setTableItem(resJson.result.properties.name, resJson.result.properties.gender, resJson.result.properties.homeworld);
        }
        catch{
            console.log("Failed to fetch " + i);
@@ -48,7 +48,7 @@ async function setTableItem(name, gender, worldPath){
     if(!worldNameExists){
         const res = await fetch(worldPath)
         const resJson = await res.json();
-        worldName = resJson.name;
+        worldName = resJson.result.properties.name;
     }
 
     tableItems.push([name, gender, worldName, worldPath]);
