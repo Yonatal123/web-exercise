@@ -16,7 +16,7 @@
         </thead>
         <tbody>
             <tr v-for="item in charactersToDisplay" :key="item[0]">
-                <td v-for="index in numofTableColumns" :key="index">{{item[index-1]}}</td>
+                <td v-for="index in numofTableColumns" :key="index" @click="rowPressed(item[0])">{{item[index-1]}}</td>
             </tr>
         </tbody>
     </table>
@@ -52,26 +52,35 @@ export default {
           return this.loadingPercentege + "%";
       },
       isNextDisabled(){
-          return this.currentLowestIndex + this.numOfItemsPerPage >= this.characters.length - 1;
+          return this.currentLowestIndex + 2*(this.numOfItemsPerPage) >= this.characters.length - 1;
       },
       isPreviousDisabled(){
-          return this.currentLowestIndex - this.numOfItemsPerPage <0;
+          return this.currentLowestIndex - this.numOfItemsPerPage < 0;
       }
   },
   methods:{
       setCharactersToDisplay: function(){
           this.charactersToDisplay = [];
-          for (let i = this.currentLowestIndex; i < this.currentLowestIndex + this.numOfItemsPerPage; i++){
+          for (let i = this.currentLowestIndex; i < this.currentLowestIndex + this.numOfNextDisplayItems; i++){
               this.charactersToDisplay.push(this.characters[i]);
           }
       },
       nextButtonPressed: function(){
-          this.currentLowestIndex += this.numOfItemsPerPage;
-          this.setCharactersToDisplay();
+          if(this.currentLowestIndex + 2*(this.numOfItemsPerPage) < this.characters.length)
+          {
+             this.currentLowestIndex += this.numOfItemsPerPage;
+            this.setCharactersToDisplay();
+          }
       },
       previousButtonPressed: function(){
-        this.currentLowestIndex -= this.numOfItemsPerPage;
-        this.setCharactersToDisplay();
+        if(this.currentLowestIndex - this.numOfItemsPerPage >=0 )
+        {
+            this.currentLowestIndex -= this.numOfItemsPerPage;
+            this.setCharactersToDisplay();
+        }
+      },
+      rowPressed: function(name){
+          console.log("pressed row " + name);
       }
   },
   watch:{
@@ -82,6 +91,7 @@ export default {
       }
   },
   mounted(){
+      this.numOfNextDisplayItems = this.numOfItemsPerPage;
     //   this.setCharactersToDisplay();
   }
 }

@@ -58,6 +58,7 @@ export default {
     await this.constructCharacters(1, 5);
     this.IsLoadingInitialData = false;
     this.IsLoadingAdditionalData = true;
+    this.LoadingPercentege = 0;
     this.constructCharacters(6, this.charactersData.total_records - 1)
   },
   constructCharacters: async function(firstIndex, lastIndex){
