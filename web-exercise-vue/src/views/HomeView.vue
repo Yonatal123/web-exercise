@@ -33,9 +33,9 @@ export default {
     data(){
     return {
     charactersHeaders: [
-      {name: "Name"},
-      {name: "Gender"},
-      {name: "Home World"}
+      {name: "Name", isLinkHeader: false, link:""},
+      {name: "Gender", isLinkHeader: false, link:""},
+      {name: "Home World", isLinkHeader: true, link: "homeworlds"}
      ],
      charactersData:{},
      characters:[],

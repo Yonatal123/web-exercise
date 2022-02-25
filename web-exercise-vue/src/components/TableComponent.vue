@@ -9,7 +9,7 @@
     <table id="dataTable" class="mainTable" v-show="inversedLoadingInitialData">
         <thead>
             <tr>
-                <th v-for="item in headers" :key="item.name"> 
+                <th v-for="item in headers" :key="item.name" @click="columnClicked(item.link)" v-bind:class="{ worldTh: item.isLinkHeader }"> 
                     {{ item.name }} 
                 </th>
             </tr>
@@ -81,6 +81,9 @@ export default {
       },
       rowClicked: function(itemName){
           this.$emit('row-clicked', itemName);
+      },
+      columnClicked: function(link){
+            this.$router.push('/' + link);
       }
   },
   watch:{
