@@ -16,13 +16,13 @@
         </thead>
         <tbody>
             <tr v-for="item in charactersToDisplay" :key="item[0]">
-                <td v-for="index in numofTableColumns" :key="index" @click="rowPressed(item[0])">{{item[index-1]}}</td>
+                <td v-for="index in numofTableColumns" :key="index" @click="rowClicked(item[0])">{{item[index-1]}}</td>
             </tr>
         </tbody>
     </table>
         <div id="previousNextBtns" v-show="inversedLoadingInitialData">
-        <button id="nextBtn" @click="nextButtonPressed" :disabled="isNextDisabled">Next</button>
-        <button id="previousBtn" @click="previousButtonPressed" :disabled="isPreviousDisabled">Previous</button>
+        <button id="nextBtn" @click="nextButtonPressed" :disabled="isNextDisabled">Next &#8811;</button>
+        <button id="previousBtn" @click="previousButtonPressed" :disabled="isPreviousDisabled">&#8810; Previous</button>
     </div>
 </template>
 
@@ -79,8 +79,8 @@ export default {
             this.setCharactersToDisplay();
         }
       },
-      rowPressed: function(name){
-          console.log("pressed row " + name);
+      rowClicked: function(itemName){
+          this.$emit('row-clicked', itemName);
       }
   },
   watch:{

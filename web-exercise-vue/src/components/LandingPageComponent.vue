@@ -1,14 +1,25 @@
 <template>
     <img src="../assets/logo.png" height="200px" class="logo">
     <TableComponent :headers="charactersHeaders" :characters="characters" :numofTableColumns="3" :isLoadingInitialData="IsLoadingInitialData"
-      :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege"/>
+      :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege" v-on:row-clicked="rowClickedEvent"/>
+      <div id="CharacterModal" class="modal" v-show="showSelectedModal">
+        <div class="modal-content">
+            <span class="close" @click="closeModal">&times;</span>
+            <h1 id="modalText">{{selectedCharacter[0]}}</h1>
+            <p id="characterHeight" class="characterData">{{characterHeight}}</p>
+            <p id="characterMass" class="characterData">{{characterMass}}</p>
+            <p id="characterHairColor" class="characterData">{{characterHairColor}}</p>
+            <p id="characterSkinColor" class="characterData">{{characterSkinColor}}</p>
+            <p id="characterEyeColor" class="characterData">{{characterEyeColor}}</p>
+            <p id="characterBirthYear" class="characterData">{{characterBirthYear}}</p>
+            <p id="characterGender" class="characterData">{{characterGender}}</p>
+          </div>
+    </div>
 </template>
 
 <script>
 import TableComponent from './TableComponent.vue'
 import '../style.css'
-// import charctersData from '../data/people.json'
-// import planetsData from '../data/planets.json'
 
 export default {
   name: 'LandingPageComponent',
@@ -26,16 +37,39 @@ export default {
      ],
      charactersData:{},
      characters:[],
-    //  charctersRawData: charctersData,
-    //  planetsRawData: planetsData,
      IsLoadingInitialData: true,
      IsLoadingAdditionalData: false,
      LoadingPercentege: 1,
+     selectedCharacter: {},
+     showSelectedModal: false
+    }
+  },
+  computed:{
+    characterHeight: function(){
+      return "Height: " + this.selectedCharacter[4];
+    },
+    characterMass: function(){
+      return "Mass: " + this.selectedCharacter[5];
+    },
+    characterHairColor: function(){
+      return "Hair Color: " + this.selectedCharacter[6];
+    },
+    characterSkinColor: function(){
+      return "Skin Color: " + this.selectedCharacter[7];
+    },
+    characterEyeColor: function(){
+      return "Eye Color: " + this.selectedCharacter[8];
+    },
+    characterBirthYear: function(){
+      return "Birth Year: " + this.selectedCharacter[9];
+    },
+    characterGender: function(){
+      return "Gender: " + this.selectedCharacter[1];
     }
   },
   methods:{
   
-  setCharacter: async function(name, gender, worldPath){
+  setCharacter: async function(name, gender, worldPath, height, mass, hairColor, skinColor, eyeColor, birthYear){
     let worldNameExists = false;
     let worldName = "";
     for(let i = 0; i < this.characters.length; i++){
@@ -48,10 +82,10 @@ export default {
     if(!worldNameExists){
         const res = await fetch(worldPath)
         const resJson = await res.json();
-        worldName = resJson.result.properties.name;
+        worldName = resJson.name;
     }
 
-    this.characters.push([name, gender, worldName, worldPath]);
+    this.characters.push([name, gender, worldName, worldPath, height, mass, hairColor, skinColor, eyeColor, birthYear]);
   },
 
   constructData: async function(){
@@ -59,23 +93,20 @@ export default {
     this.IsLoadingInitialData = false;
     this.IsLoadingAdditionalData = true;
     this.LoadingPercentege = 0;
-    this.constructCharacters(6, this.charactersData.total_records - 1)
+    this.constructCharacters(6, this.charactersData.count - 1)
   },
   constructCharacters: async function(firstIndex, lastIndex){
    for(let i = firstIndex; i <= lastIndex; i++){
        try{
-        const res = await fetch("https://www.swapi.tech/api/people/" + i);
+        const res = await fetch("https://swapi.dev/api/people/" + i);
         console.log('fetched' + i);
         const resJson = await res.json();
-        if(this.IsLoadingAdditionalData)
-        {
-          this.LoadingPercentege = Math.round((i / (lastIndex - 5)) * 100);
-        }
-        else{
-            this.LoadingPercentege = Math.round((i / lastIndex) * 100);
-        }
         
-        await this.setCharacter(resJson.result.properties.name, resJson.result.properties.gender, resJson.result.properties.homeworld);
+        this.LoadingPercentege = Math.round((i / lastIndex) * 100);
+        
+        await this.setCharacter(resJson.name, resJson.gender, resJson.homeworld,
+                                resJson.height, resJson.mass, resJson.hair_color, resJson.skin_color, 
+                                resJson.eye_color, resJson.birth_year);
        }
        catch (err){
            console.log("Failed to fetch " + i + " " + err);
@@ -85,7 +116,7 @@ export default {
   },
     fetchGeneralData: function(){
         try{
-          fetch("https://www.swapi.tech/api/people/").then(res =>
+          fetch("https://swapi.dev/api/people/").then(res =>
             res.json().then(data => {
               this.charactersData = data;
         })
@@ -97,12 +128,20 @@ export default {
 
     },
 
-     constructDataFromJson: function(){
-         this.charctersRawData.data.forEach( item => {
-           this.characters.push([item.name, item.gender, this.planetsRawData.data[item.homeworld].name]);
-     })
-   },
+  //    constructDataFromJson: function(){
+  //        this.charctersRawData.data.forEach( item => {
+  //          this.characters.push([item.name, item.gender, this.planetsRawData.data[item.homeworld].name]);
+  //    })
+  //  },
 
+    rowClickedEvent: function(name){
+       Object.assign(this.selectedCharacter, this.characters.find(element => element[0] === name));
+       this.showSelectedModal = true;
+    },
+
+    closeModal: function(){
+      this.showSelectedModal = false;
+    }
   },
 
   mounted(){
