@@ -1,8 +1,9 @@
 <template>
   <div class="home">
       <img src="../assets/logo.png" height="200px" class="logo">
-    <TableComponent :headers="charactersHeaders" :characters="characters" :numofTableColumns="3" :isLoadingInitialData="IsLoadingInitialData"
-      :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege" v-on:row-clicked="rowClickedEvent"/>
+    <TableComponent :headers="charactersHeaders" :characters="charactersSet" :numofTableColumns="3" :isLoadingInitialData="IsLoadingInitialData"
+      :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege" v-on:row-clicked="rowClickedEvent"
+      v-on:navigated-to="navigated"/>
       <div id="CharacterModal" class="modal" v-show="showSelectedModal">
         <div class="modal-content">
             <span class="close" @click="closeModal">&times;</span>
@@ -30,18 +31,18 @@ export default {
   },
  props: {
   },
-    data(){
+
+data(){
     return {
     charactersHeaders: [
       {name: "Name", isLinkHeader: false, link:""},
       {name: "Gender", isLinkHeader: false, link:""},
       {name: "Home World", isLinkHeader: true, link: "homeworlds"}
      ],
-     charactersData:{},
-     characters:[],
      IsLoadingInitialData: true,
      IsLoadingAdditionalData: false,
      LoadingPercentege: 1,
+     loadingAmount: 0,
      selectedCharacter: {},
      showSelectedModal: false
     }
@@ -67,17 +68,20 @@ export default {
     },
     characterGender: function(){
       return "Gender: " + this.selectedCharacter[1];
-    }
+    },
+    charactersSet (){
+      return this.$store.state.characters;
+    },
   },
   methods:{
   
   setCharacter: async function(name, gender, worldPath, height, mass, hairColor, skinColor, eyeColor, birthYear){
     let worldNameExists = false;
     let worldName = "";
-    for(let i = 0; i < this.characters.length; i++){
-        if(worldPath === this.characters[i].worldPath){
+    for(let i = 0; i < this.$store.state.characters.length; i++){
+        if(worldPath === this.$store.state.characters[i].worldPath){
             worldNameExists = true;
-            worldName = this.characters[i].worldName;
+            worldName = this.$store.state.characters[i].worldName;
             break;
         }
     }
@@ -86,8 +90,8 @@ export default {
         const resJson = await res.json();
         worldName = resJson.name;
     }
-
-    this.characters.push([name, gender, worldName, worldPath, height, mass, hairColor, skinColor, eyeColor, birthYear]);
+  
+    this.$store.commit('addCharacter', [name, gender, worldName, worldPath, height, mass, hairColor, skinColor, eyeColor, birthYear]);
   },
 
   constructData: async function(){
@@ -95,7 +99,7 @@ export default {
     this.IsLoadingInitialData = false;
     this.IsLoadingAdditionalData = true;
     this.LoadingPercentege = 0;
-    this.constructCharacters(6, this.charactersData.count - 1)
+    this.constructCharacters(6, this.$store.state.charactersData.count - 1)
   },
   constructCharacters: async function(firstIndex, lastIndex){
    for(let i = firstIndex; i <= lastIndex; i++){
@@ -105,7 +109,7 @@ export default {
         const resJson = await res.json();
         
         this.LoadingPercentege = Math.round((i / lastIndex) * 100);
-        
+        this.loadingAmount = i;
         await this.setCharacter(resJson.name, resJson.gender, resJson.homeworld,
                                 resJson.height, resJson.mass, resJson.hair_color, resJson.skin_color, 
                                 resJson.eye_color, resJson.birth_year);
@@ -120,7 +124,7 @@ export default {
         try{
           fetch("https://swapi.dev/api/people/").then(res =>
             res.json().then(data => {
-              this.charactersData = data;
+              this.$store.commit('setCharactersData', data)
         })
            ).then(this.constructData)
         } 
@@ -130,15 +134,15 @@ export default {
 
     },
 
-  //    constructDataFromJson: function(){
-  //        this.charctersRawData.data.forEach( item => {
-  //          this.characters.push([item.name, item.gender, this.planetsRawData.data[item.homeworld].name]);
-  //    })
-  //  },
-
     rowClickedEvent: function(name){
-       Object.assign(this.selectedCharacter, this.characters.find(element => element[0] === name));
+       Object.assign(this.selectedCharacter, this.$store.state.characters.find(element => element[0] === name));
        this.showSelectedModal = true;
+    },
+
+    navigated: function(link){
+      if(link === "homeworlds"){
+        this.$store.commit('updateAmountLoaded', this.loadingAmount);
+      }
     },
 
     closeModal: function(){
@@ -147,8 +151,17 @@ export default {
   },
 
   mounted(){
-    this.fetchGeneralData()
-    // this.constructDataFromJson()
+    if(this.$store.state.characters.length === 0){
+        this.fetchGeneralData();
+    }
+    else if(this.$store.state.amountLoaded < this.$store.state.charactersData.count){
+      this.IsLoadingInitialData = false;
+      this.IsLoadingAdditionalData = true;
+      this.constructCharacters(this.$store.state.amountLoaded, this.$store.state.charactersData.count);
+    }
+    else{
+      this.IsLoadingInitialData = false;
+    }
   }
 }
 
