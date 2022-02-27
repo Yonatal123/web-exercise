@@ -84,7 +84,6 @@ export default {
       },
       columnClicked: function(link){
             this.$router.push('/' + link);
-            this.$emit('navigated-to', link);
       }
   },
   watch:{

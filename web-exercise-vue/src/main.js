@@ -9,9 +9,14 @@ import { createStore } from 'vuex'
       return{
          characters:[],
          charactersData:{},
-         amountLoaded: 0
+         charactersAmountLoaded: 0,
+
+         planets:[],
+         planetsData:{},
+         planetsAmountLoaded: 0
       }
     },
+
     mutations:{
       addCharacter(state, character){
         state.characters.push(character);
@@ -19,8 +24,18 @@ import { createStore } from 'vuex'
       setCharactersData(state, data){
         state.charactersData = data;
       },
-      updateAmountLoaded(state, number){
-          state.amountLoaded = number;
+      updateCharactersAmountLoaded(state, number){
+          state.charactersAmountLoaded = number;
+      },
+
+      addPlanet(state, planet){
+        state.planets.push(planet);
+      },
+      setPlanetsData(state, data){
+        state.planetsData = data;
+      },
+      updatePlanetsAmountLoaded(state, number){
+        state.planetsAmountLoaded = number
       }
     }
   })

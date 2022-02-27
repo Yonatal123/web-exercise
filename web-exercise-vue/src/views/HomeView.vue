@@ -2,8 +2,7 @@
   <div class="home">
       <img src="../assets/logo.png" height="200px" class="logo">
     <TableComponent :headers="charactersHeaders" :characters="charactersSet" :numofTableColumns="3" :isLoadingInitialData="IsLoadingInitialData"
-      :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege" v-on:row-clicked="rowClickedEvent"
-      v-on:navigated-to="navigated"/>
+      :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege" v-on:row-clicked="rowClickedEvent"/>
       <div id="CharacterModal" class="modal" v-show="showSelectedModal">
         <div class="modal-content">
             <span class="close" @click="closeModal">&times;</span>
@@ -42,7 +41,6 @@ data(){
      IsLoadingInitialData: true,
      IsLoadingAdditionalData: false,
      LoadingPercentege: 1,
-     loadingAmount: 0,
      selectedCharacter: {},
      showSelectedModal: false
     }
@@ -107,9 +105,10 @@ data(){
         const res = await fetch("https://swapi.dev/api/people/" + i);
         console.log('fetched' + i);
         const resJson = await res.json();
-        
-        this.LoadingPercentege = Math.round((i / lastIndex) * 100);
-        this.loadingAmount = i;
+
+        this.$store.commit('updateCharactersAmountLoaded', i);
+        this.setLoadingPercentege();
+
         await this.setCharacter(resJson.name, resJson.gender, resJson.homeworld,
                                 resJson.height, resJson.mass, resJson.hair_color, resJson.skin_color, 
                                 resJson.eye_color, resJson.birth_year);
@@ -139,14 +138,12 @@ data(){
        this.showSelectedModal = true;
     },
 
-    navigated: function(link){
-      if(link === "homeworlds"){
-        this.$store.commit('updateAmountLoaded', this.loadingAmount);
-      }
-    },
-
     closeModal: function(){
       this.showSelectedModal = false;
+    },
+
+    setLoadingPercentege: function(){
+      this.LoadingPercentege = Math.round((this.$store.state.charactersAmountLoaded / this.$store.state.charactersData.count) * 100);
     }
   },
 
@@ -154,10 +151,11 @@ data(){
     if(this.$store.state.characters.length === 0){
         this.fetchGeneralData();
     }
-    else if(this.$store.state.amountLoaded < this.$store.state.charactersData.count){
+    else if(this.$store.state.charactersAmountLoaded < this.$store.state.charactersData.count){
       this.IsLoadingInitialData = false;
       this.IsLoadingAdditionalData = true;
-      this.constructCharacters(this.$store.state.amountLoaded, this.$store.state.charactersData.count);
+      this.constructCharacters(this.$store.state.charactersAmountLoaded, this.$store.state.charactersData.count);
+      this.setLoadingPercentege();
     }
     else{
       this.IsLoadingInitialData = false;
