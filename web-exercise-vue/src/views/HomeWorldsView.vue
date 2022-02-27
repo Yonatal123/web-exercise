@@ -2,7 +2,7 @@
   <div class="homeWorlds">
     <img src="../assets/planet.png" class="logo">
     <button id="backHomeBtn" @click="goHome">Back Home</button>
-   <TableComponent :headers="charactersHeaders" :characters="planetsSet" :numofTableColumns="2" :isLoadingInitialData="IsLoadingInitialData"
+   <TableComponent :headers="charactersHeaders" :items="planetsSet" :numofTableColumns="2" :isLoadingInitialData="IsLoadingInitialData"
       :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege"/>
   </div>
 </template>

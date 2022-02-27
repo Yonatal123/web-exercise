@@ -15,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="item in charactersToDisplay" :key="item[0]">
+            <tr v-for="item in itemsToDisplay" :key="item[0]">
                 <td v-for="index in numofTableColumns" :key="index" @click="rowClicked(item[0])">{{item[index-1]}}</td>
             </tr>
         </tbody>
@@ -31,7 +31,7 @@ export default {
   name: 'TableComponent',
   props: {
     headers: [],
-    characters: [],
+    items: [],
     numofTableColumns: Number,
     isLoadingInitialData: Boolean,
     isLoadingAdditionalData: Boolean,
@@ -39,7 +39,7 @@ export default {
   },
   data(){
       return{
-          charactersToDisplay: [],
+          itemsToDisplay: [],
           numOfItemsPerPage: 5,
           currentLowestIndex: 0,
       }
@@ -52,31 +52,31 @@ export default {
           return this.loadingPercentege + "%";
       },
       isNextDisabled(){
-          return this.currentLowestIndex + 2*(this.numOfItemsPerPage) >= this.characters.length - 1;
+          return this.currentLowestIndex + 2*(this.numOfItemsPerPage) >= this.items.length - 1;
       },
       isPreviousDisabled(){
           return this.currentLowestIndex - this.numOfItemsPerPage < 0;
       }
   },
   methods:{
-      setCharactersToDisplay: function(){
-          this.charactersToDisplay = [];
+      setitemsToDisplay: function(){
+          this.itemsToDisplay = [];
           for (let i = this.currentLowestIndex; i < this.currentLowestIndex + this.numOfNextDisplayItems; i++){
-              this.charactersToDisplay.push(this.characters[i]);
+              this.itemsToDisplay.push(this.items[i]);
           }
       },
       nextButtonPressed: function(){
-          if(this.currentLowestIndex + 2*(this.numOfItemsPerPage) < this.characters.length)
+          if(this.currentLowestIndex + 2*(this.numOfItemsPerPage) < this.items.length)
           {
              this.currentLowestIndex += this.numOfItemsPerPage;
-            this.setCharactersToDisplay();
+            this.setitemsToDisplay();
           }
       },
       previousButtonPressed: function(){
         if(this.currentLowestIndex - this.numOfItemsPerPage >=0 )
         {
             this.currentLowestIndex -= this.numOfItemsPerPage;
-            this.setCharactersToDisplay();
+            this.setitemsToDisplay();
         }
       },
       rowClicked: function(itemName){
@@ -89,13 +89,13 @@ export default {
   watch:{
       isLoadingInitialData: function(val){
           if(!val){
-              this.setCharactersToDisplay();
+              this.setitemsToDisplay();
           }
       }
   },
   mounted(){
       this.numOfNextDisplayItems = this.numOfItemsPerPage;
-    //   this.setCharactersToDisplay();
+    //   this.setitemsToDisplay();
   }
 }
 </script>
