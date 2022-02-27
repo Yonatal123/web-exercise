@@ -3,17 +3,18 @@ import App from './App.vue'
 import router from './router'
 import { createStore } from 'vuex'
 
-
    const store = createStore({
     state(){
       return{
          characters:[],
          charactersData:{},
          charactersAmountLoaded: 0,
+         currentCharactersPage: 0,
 
          planets:[],
          planetsData:{},
-         planetsAmountLoaded: 0
+         planetsAmountLoaded: 0,
+         currentPlanetsPage: 0,
       }
     },
 
@@ -27,6 +28,9 @@ import { createStore } from 'vuex'
       updateCharactersAmountLoaded(state, number){
           state.charactersAmountLoaded = number;
       },
+      updateCurrentCharactersPage(state, number){
+        state.currentCharactersPage = number;
+      },
 
       addPlanet(state, planet){
         state.planets.push(planet);
@@ -36,6 +40,9 @@ import { createStore } from 'vuex'
       },
       updatePlanetsAmountLoaded(state, number){
         state.planetsAmountLoaded = number
+      },
+      updateCurrentPlanetsPage(state, number){
+        state.currentPlanetsPage = number;
       }
     }
   })

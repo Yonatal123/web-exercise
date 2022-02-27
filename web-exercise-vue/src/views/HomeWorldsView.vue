@@ -3,7 +3,8 @@
     <img src="../assets/planet.png" class="logo">
     <button id="backHomeBtn" @click="goHome">Back Home</button>
    <TableComponent :headers="charactersHeaders" :items="planetsSet" :numofTableColumns="2" :isLoadingInitialData="IsLoadingInitialData"
-      :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege"/>
+      :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege" :tableType="'PLANETS'"
+      v-on:current-page="onCurrentPageUpdate"/>
   </div>
 </template>
 <script>
@@ -85,6 +86,10 @@ export default {
 
   setLoadingPercentege: function(){
       this.LoadingPercentege = Math.round((this.$store.state.planetsAmountLoaded / this.$store.state.planetsData.count) * 100);
+    },
+
+  onCurrentPageUpdate: function(pageNumber){
+      this.$store.commit('updateCurrentPlanetsPage', pageNumber);
     }
   },
 

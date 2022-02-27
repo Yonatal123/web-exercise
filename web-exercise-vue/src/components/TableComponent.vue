@@ -3,8 +3,12 @@
     <img src="../assets/horizontal_spaceship.png" id="horizontalSpaceship" v-if="isLoadingAdditionalData">
     <p id="loadingInitialText" class="loadingIndication" v-if="isLoadingInitialData">{{percentegeValue}}</p>
     <div id="loadingAdditionalIndication" class="loadingAdditionalIndication" v-if="isLoadingAdditionalData">
-        <p id="loadingAdditionalText">Loading additional data</p>
-        <p id="loadingAdditionalPercentage">{{percentegeValue}}</p>
+        <p id="loadingAdditionalText" class="topTableText">Loading additional data</p>
+        <p id="loadingAdditionalPercentage" class="topTableText">{{percentegeValue}}</p>
+    </div>
+    <div class="pagesIndication" v-if="inversedLoadingInitialData">
+        <p id="currentPageText" class="topTableText">{{currentPageText}}</p>
+        <p id="totalPagesText" class="topTableText">{{totalNumOfPages}}</p>
     </div>
     <table id="dataTable" class="mainTable" v-show="inversedLoadingInitialData">
         <thead>
@@ -27,6 +31,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'TableComponent',
   props: {
@@ -36,12 +41,14 @@ export default {
     isLoadingInitialData: Boolean,
     isLoadingAdditionalData: Boolean,
     loadingPercentege: Number,
+    tableType: String
   },
   data(){
       return{
           itemsToDisplay: [],
           numOfItemsPerPage: 5,
           currentLowestIndex: 0,
+          currentPage: 1
       }
   },
   computed:{
@@ -56,6 +63,13 @@ export default {
       },
       isPreviousDisabled(){
           return this.currentLowestIndex - this.numOfItemsPerPage < 0;
+      },
+      totalNumOfPages(){
+          return Math.round((this.items.length - 1) / this.numOfItemsPerPage) - 1 === 0 ? 1 : Math.round((this.items.length - 1) / this.numOfItemsPerPage) - 1;
+      },
+      currentPageText(){
+          const currentPageToDisplay = this.currentPage + 1;
+          return "Page " + currentPageToDisplay + " of";
       }
   },
   methods:{
@@ -69,7 +83,9 @@ export default {
           if(this.currentLowestIndex + 2*(this.numOfItemsPerPage) < this.items.length)
           {
              this.currentLowestIndex += this.numOfItemsPerPage;
-            this.setitemsToDisplay();
+             this.setitemsToDisplay();
+             ++this.currentPage;
+             this.emitCurrentPage();
           }
       },
       previousButtonPressed: function(){
@@ -77,6 +93,8 @@ export default {
         {
             this.currentLowestIndex -= this.numOfItemsPerPage;
             this.setitemsToDisplay();
+            --this.currentPage;
+            this.emitCurrentPage();
         }
       },
       rowClicked: function(itemName){
@@ -84,6 +102,9 @@ export default {
       },
       columnClicked: function(link){
             this.$router.push('/' + link);
+      },
+      emitCurrentPage: function(){
+          this.$emit('current-page', this.currentPage);
       }
   },
   watch:{
@@ -95,7 +116,18 @@ export default {
   },
   mounted(){
       this.numOfNextDisplayItems = this.numOfItemsPerPage;
-    //   this.setitemsToDisplay();
+      switch(this.tableType){
+          case "CHARACTERS":{
+              this.currentPage = this.$store.state.currentCharactersPage;
+              break;
+          }
+          case "PLANETS":{
+              this.currentPage = this.$store.state.currentPlanetsPage;
+              break;
+          }
+      }
+
+      this.currentLowestIndex = this.currentPage * this.numOfItemsPerPage;
   }
 }
 </script>

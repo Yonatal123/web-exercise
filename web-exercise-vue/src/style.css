@@ -157,19 +157,38 @@ button:disabled:hover{
     font-size: 24px;
     left:5%;
   }
+
+  .pagesIndication{
+    position: absolute;
+    top:150px;
+    left:90%;
+    margin-left: -115px;
+  }
+
+  .topTableText{
+    color: #ccbc07;
+  }
+
   #loadingAdditionalText{
       float: left;
-      color: #ccbc07;
   }
   #loadingAdditionalPercentage{
       float: right;
-      color: #ccbc07;
+  }
+
+  #currentPageText{
+    float: left;
+    margin-right: -5px;
+  }
+
+  #totalPagesText{
+    float: right;
   }
 
   #backHomeBtn{
     position: absolute;
     float: left;
-    left:10%;
+    left:5%;
     margin-top: 10px;    
   }
 

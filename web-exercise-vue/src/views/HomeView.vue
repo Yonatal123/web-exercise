@@ -2,7 +2,8 @@
   <div class="home">
       <img src="../assets/logo.png" height="200px" class="logo">
     <TableComponent :headers="charactersHeaders" :items="charactersSet" :numofTableColumns="3" :isLoadingInitialData="IsLoadingInitialData"
-      :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege" v-on:row-clicked="rowClickedEvent"/>
+      :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege" v-on:row-clicked="rowClickedEvent" :tableType="'CHARACTERS'"
+      v-on:current-page="onCurrentPageUpdate"/>
       <div id="CharacterModal" class="modal" v-show="showSelectedModal">
         <div class="modal-content">
             <span class="close" @click="closeModal">&times;</span>
@@ -42,7 +43,7 @@ data(){
      IsLoadingAdditionalData: false,
      LoadingPercentege: 1,
      selectedCharacter: {},
-     showSelectedModal: false
+     showSelectedModal: false,
     }
   },
   computed:{
@@ -144,6 +145,10 @@ data(){
 
     setLoadingPercentege: function(){
       this.LoadingPercentege = Math.round((this.$store.state.charactersAmountLoaded / this.$store.state.charactersData.count) * 100);
+    },
+
+    onCurrentPageUpdate: function(pageNumber){
+      this.$store.commit('updateCurrentCharactersPage', pageNumber);
     }
   },
 
