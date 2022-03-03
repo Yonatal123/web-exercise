@@ -13,14 +13,14 @@
     <table id="dataTable" class="mainTable" v-show="inversedLoadingInitialData">
         <thead>
             <tr>
-                <th v-for="item in headers" :key="item.name" @click="columnClicked(item.link)" v-bind:class="{ worldTh: item.isLinkHeader }"> 
+                <th v-for="item in headers" :key="item.name" @click="columnClicked(item.link)" :class="{ worldTh: item.isLinkHeader }"> 
                     {{ item.name }} 
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="item in itemsToDisplay" :key="item[0]">
-                <td v-for="index in numofTableColumns" :key="index" @click="rowClicked(item[0])">{{item[index-1]}}</td>
+                <td v-for="index in headers.length" :key="index" @click="rowClicked(item[0])">{{item[index-1]}}</td>
             </tr>
         </tbody>
     </table>
@@ -37,7 +37,6 @@ export default {
   props: {
     headers: [],
     items: [],
-    numofTableColumns: Number,
     isLoadingInitialData: Boolean,
     isLoadingAdditionalData: Boolean,
     loadingPercentege: Number,
