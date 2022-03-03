@@ -2,7 +2,7 @@
   <div class="homeWorlds">
     <img src="../assets/planet.png" class="logo">
     <button id="backHomeBtn" @click="goHome">Back Home</button>
-   <TableComponent :headers="charactersHeaders" :items="planetsSet" :numofTableColumns="2" :isLoadingInitialData="IsLoadingInitialData"
+   <TableComponent :headers="charactersHeaders" :items="planetsSet" :isLoadingInitialData="IsLoadingInitialData"
       :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege" :tableType="'PLANETS'"
       v-on:current-page="onCurrentPageUpdate"/>
   </div>

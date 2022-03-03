@@ -1,7 +1,7 @@
 <template>
   <div class="home">
       <img src="../assets/logo.png" height="200px" class="logo">
-    <TableComponent :headers="charactersHeaders" :items="charactersSet" :numofTableColumns="3" :isLoadingInitialData="IsLoadingInitialData"
+    <TableComponent :headers="charactersHeaders" :items="charactersSet" :isLoadingInitialData="IsLoadingInitialData"
       :isLoadingAdditionalData="IsLoadingAdditionalData" :loadingPercentege="LoadingPercentege" v-on:row-clicked="rowClickedEvent" :tableType="'CHARACTERS'"
       v-on:current-page="onCurrentPageUpdate"/>
       <div id="CharacterModal" class="modal" v-show="showSelectedModal">
